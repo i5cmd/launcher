@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Kartian's Launcher (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "Kartian's Launcher (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}
