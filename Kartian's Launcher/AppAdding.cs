@@ -14,6 +14,9 @@ namespace Kartian_s_Launcher
         public string Path { get; set; }
         public string IconPath { get; set; }
         public string Author { get; set; }
+        public long Size { get; set; }
+        public DateTime Date { get; set; }
+        public string Description { get; set; }
     }
     public class AppAdding
     {
@@ -37,7 +40,10 @@ namespace Kartian_s_Launcher
                 Name = !string.IsNullOrEmpty(fileInfo.InternalName) ? fileInfo.InternalName : Path.GetFileName(exePath),
                 Path = exePath,
                 IconPath = GetIco(parentPath),
-                Author = !string.IsNullOrEmpty(fileInfo.CompanyName) ? fileInfo.CompanyName : ""
+                Author = !string.IsNullOrEmpty(fileInfo.CompanyName) ? fileInfo.CompanyName : "",
+                Description = !string.IsNullOrEmpty(fileInfo.FileDescription) ? fileInfo.FileDescription : "",
+                Size = new FileInfo(exePath).Length,
+                Date = new FileInfo(exePath).CreationTime
             };
         }
 

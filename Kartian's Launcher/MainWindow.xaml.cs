@@ -1,3 +1,4 @@
+using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
@@ -6,19 +7,20 @@ using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Media.Imaging;
 using Microsoft.UI.Xaml.Navigation;
-using Windows.Storage.Pickers;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Graphics;
 using Windows.Storage;
+using Windows.Storage.Pickers;
 using WinRT.Interop;
 using static Kartian_s_Launcher.AppAdding;
 using static Kartian_s_Launcher.SystemComponents;
@@ -42,6 +44,14 @@ namespace Kartian_s_Launcher
             json = new JsonManagement();
             sys = new SystemComponents();
             ProgramsDetails = new ObservableCollection<AppDetails>(json.LoadJson());
+            this.AppWindow.MoveAndResize(new RectInt32
+            {
+                Height = 600,
+                Width = 800
+            });
+            var appWindowPresenter = this.AppWindow.Presenter as OverlappedPresenter;
+            appWindowPresenter.PreferredMinimumWidth = 800;
+            appWindowPresenter.PreferredMinimumHeight = 600;
         }
 
         private async void AddItem_Click(object sender, RoutedEventArgs e)
@@ -71,6 +81,10 @@ namespace Kartian_s_Launcher
             Iconx2.Source = new BitmapImage(new Uri(app.IconPath));
             Titlex2.Text = app.Name;
             Authorx2.Text = app.Author;
+            Pathx2.Text = app.Path;
+            Descx2.Text = app.Description;
+            Sizex2.Text = $"{((double)app.Size / 1024 / 1024).ToString("F2")} MB";
+            Datex2.Text = app.Date.ToLongDateString();
         }
 
         private void EditItem_Click(object sender, RoutedEventArgs e)
@@ -124,6 +138,11 @@ namespace Kartian_s_Launcher
                 json.RemoveItem(curApp, ProgramsDetails);
                 curApp = null;
             }
+        }
+
+        private void ExitProgram_Click(object sender, RoutedEventArgs e)
+        {
+            Environment.Exit(0);
         }
     }
 }

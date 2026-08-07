@@ -20,9 +20,7 @@
         </Grid.RowDefinitions>
         <MenuBar Grid.Row="0">
             <MenuBarItem Title="File">
-                <MenuFlyoutItem Text="Options"></MenuFlyoutItem>
-                <MenuFlyoutItem Text="About"></MenuFlyoutItem>
-                <MenuFlyoutItem Text="Exit"></MenuFlyoutItem>
+                <MenuFlyoutItem Text="Exit" x:Name="ExitProgram" Click="ExitProgram_Click"></MenuFlyoutItem>
             </MenuBarItem>
             <MenuBarItem Title="Content">
                 <MenuFlyoutItem Text="Run" x:Name="RunItem" Click="RunItem_Click"></MenuFlyoutItem>
@@ -58,12 +56,30 @@
                     </Border>
                     <StackPanel Orientation="Vertical">
                         <TextBlock Margin="2" FontWeight="Bold" FontSize="35" VerticalAlignment="Bottom" x:Name="Titlex2"></TextBlock>
-                        <TextBlock Margin="2" FontWeight="Normal" FontSize="12" VerticalAlignment="Bottom" x:Name="Authorx2"></TextBlock>
+                        <TextBlock Margin="2" FontWeight="Normal" FontSize="16" VerticalAlignment="Bottom" x:Name="Authorx2"></TextBlock>
                     </StackPanel>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
-                    <Button Margin="3" Style="{StaticResource AccentButtonStyle}">Run</Button>
-                    <Button Margin="3">Edit</Button>
+                    <Button Margin="3" Style="{StaticResource AccentButtonStyle}" Click="RunItem_Click">Run</Button>
+                    <Button Margin="3" Click="EditItem_Click">Edit</Button>
+                </StackPanel>
+                <StackPanel Orientation="Vertical">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Margin="2" FontWeight="Bold" FontSize="12" VerticalAlignment="Bottom">Path: </TextBlock>
+                        <TextBlock Margin="2" FontWeight="Normal" FontSize="12" VerticalAlignment="Bottom" x:Name="Pathx2"></TextBlock>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Margin="2" FontWeight="Bold" FontSize="12" VerticalAlignment="Bottom">Description:</TextBlock>
+                        <TextBlock Margin="2" FontWeight="Normal" FontSize="12" VerticalAlignment="Bottom" x:Name="Descx2"></TextBlock>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Margin="2" FontWeight="Bold" FontSize="12" VerticalAlignment="Bottom">Size:</TextBlock>
+                        <TextBlock Margin="2" FontWeight="Normal" FontSize="12" VerticalAlignment="Bottom" x:Name="Sizex2"></TextBlock>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Margin="2" FontWeight="Bold" FontSize="12" VerticalAlignment="Bottom">Date:</TextBlock>
+                        <TextBlock Margin="2" FontWeight="Normal" FontSize="12" VerticalAlignment="Bottom" x:Name="Datex2"></TextBlock>
+                    </StackPanel>
                 </StackPanel>
             </StackPanel>
         </Grid>
