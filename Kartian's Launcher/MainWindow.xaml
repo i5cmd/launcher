@@ -63,7 +63,7 @@
                     <Button Margin="3" Style="{StaticResource AccentButtonStyle}" Click="RunItem_Click">Run</Button>
                     <Button Margin="3" Click="EditItem_Click">Edit</Button>
                 </StackPanel>
-                <StackPanel Orientation="Vertical">
+                <StackPanel Orientation="Vertical" Margin="6">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Margin="2" FontWeight="Bold" FontSize="12" VerticalAlignment="Bottom">Path: </TextBlock>
                         <TextBlock Margin="2" FontWeight="Normal" FontSize="12" VerticalAlignment="Bottom" x:Name="Pathx2"></TextBlock>

@@ -26,6 +26,7 @@
                 <TextBlock x:Name="PathText"></TextBlock>
             </StackPanel>
             <TextBox Header="Author" Margin="5, 0" x:Name="AuthorBox"></TextBox>
+            <TextBox Header="Description" Margin="5, 0" x:Name="DescBox"></TextBox>
         </StackPanel>
         <StackPanel Grid.Row="1" Width="500">
             <Button Content="Save" Style="{StaticResource AccentButtonStyle}" x:Name="SaveEditedContent" HorizontalAlignment="Center" Margin="5" Click="SaveEditedContent_Click"></Button>

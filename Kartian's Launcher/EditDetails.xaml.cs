@@ -28,6 +28,7 @@ namespace Kartian_s_Launcher
         public string Name { get; set; }
         public string IconPath { get; set; }
         public string Author { get; set; }
+        public string Description { get; set; }
     }
     public sealed partial class EditDetails : Window
     {
@@ -52,6 +53,7 @@ namespace Kartian_s_Launcher
             TitleBox.Text = curApp.Name;
             PathText.Text = curApp.IconPath;
             AuthorBox.Text = curApp.Author;
+            DescBox.Text = curApp.Description;
         }
 
         private void SaveEditedContent_Click(object sender, RoutedEventArgs e)
@@ -60,7 +62,8 @@ namespace Kartian_s_Launcher
             {
                 Name = TitleBox.Text,
                 IconPath = path,
-                Author = AuthorBox.Text
+                Author = AuthorBox.Text,
+                Description = DescBox.Text
             });
             this.Close();
         }
