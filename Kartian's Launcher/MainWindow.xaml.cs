@@ -31,17 +31,6 @@ namespace Kartian_s_Launcher
 {
     public sealed partial class MainWindow : Window
     {
-        [StructLayout(LayoutKind.Sequential)]
-        public struct POINT
-        {
-            public int X;
-            public int Y;
-        }
-
-        [DllImport("user32.dll")]
-        public static extern bool GetCursorPos(out POINT lpPoint);
-
-
         private AppAdding ap;
         private AppDetails curApp;
         private EditDetails edit;
@@ -186,33 +175,15 @@ namespace Kartian_s_Launcher
                 trayIcon.IsVisible = false;
             };
 
-            /* trayIcon.ContextMenu += (sender, e) =>
+            trayIcon.RightDoubleClick += (sender, e) =>
             {
-                GetCursorPos(out POINT point);
-                var menu = new MenuFlyout();
+                Environment.Exit(0);
+            };
+        }
 
-                var showWindow = new MenuFlyoutItem { Text = "Show Window " };
-                showWindow.Click += (sender, args) =>
-                {
-                    this.AppWindow.Show();
-                    trayIcon.IsVisible = false;
-                };
+        private void Settings_Click(object sender, RoutedEventArgs e)
+        {
 
-                var exitWindow = new MenuFlyoutItem { Text = "Exit program" };
-                exitWindow.Click += (sender, args) =>
-                {
-                    Environment.Exit(0);
-                };
-
-                menu.Items.Add(showWindow);
-                menu.Items.Add(exitWindow);
-;
-                menu.ShowAt(this.Content, new FlyoutShowOptions
-                {
-                    Position = new Point(point.X, point.Y),
-                    ShowMode = FlyoutShowMode.Transient
-                });
-            }; */
         }
     }
 }
