@@ -19,7 +19,6 @@
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
-        <Button Grid.Row="0" x:Name="AddShortcut" Click="AddShortcut_Click">+ Add</Button>
         <ListView Grid.Row="1" x:Name="Shortcuts" ItemsSource="{x:Bind shortcuters}">
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="local:ShortcutDetails">
@@ -30,7 +29,7 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        <StackPanel Grid.Row="2">
+        <StackPanel Grid.Row="0">
             <ListBox x:Name="ModifierSelection" SelectionChanged="ModifierSelection_SelectionChanged">
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -39,13 +38,12 @@
                 </ListBox.ItemsPanel>
 
                 <ListBoxItem Content="Alt" x:Name="Menu"></ListBoxItem>
-                <ListBoxItem Content="L Windows" x:Name="LWindows"></ListBoxItem>
-                <ListBoxItem Content="R Windows" x:Name="RWindows"></ListBoxItem>
+                <ListBoxItem Content="Windows" x:Name="LWindows"></ListBoxItem>
                 <ListBoxItem Content="Ctrl" x:Name="Control"></ListBoxItem>
                 <ListBoxItem Content="Shift" x:Name="Shift"></ListBoxItem>
-                <ListBoxItem Content="Application" x:Name="App"></ListBoxItem>
             </ListBox>
             <TextBox Header="Shortcut" x:Name="ShortcutInput" KeyDown="ShortcutInput_KeyDown" IsReadOnly="True"></TextBox>
+            <Button Grid.Row="0" x:Name="AddShortcut" Click="AddShortcut_Click">+ Add</Button>
         </StackPanel>
        
         

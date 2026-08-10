@@ -32,14 +32,16 @@ namespace Kartian_s_Launcher
     public sealed partial class Settings : Window
     {
         private List<ShortcutDetails> shortcuters;
-        private VirtualKey modifier;
+        private VirtualKeyModifiers modifier;
         private VirtualKey mainKey;
         private ObservableCollection<AppDetails> gimmeit;
+        private SystemComponents sys;
         public Settings(ObservableCollection<AppDetails> appDetails)
         {
             InitializeComponent();
             shortcuters = new List<ShortcutDetails>();
             gimmeit = appDetails;
+            sys = new SystemComponents();
         }
 
         private void ShortcutInput_KeyDown(object sender, KeyRoutedEventArgs e)
@@ -56,23 +58,17 @@ namespace Kartian_s_Launcher
             {
                 switch (selectedItem.Name)
                 {
-                    case "Menu": 
-                        modifier = VirtualKey.Menu;
+                    case "Menu":
+                        modifier = VirtualKeyModifiers.Menu;
                         break;
                     case "LWindows":
-                        modifier = VirtualKey.LeftWindows;
-                        break;
-                    case "RWindows":
-                        modifier = VirtualKey.RightWindows;
+                        modifier = VirtualKeyModifiers.Windows;
                         break;
                     case "Control":
-                        modifier = VirtualKey.Control;
+                        modifier = VirtualKeyModifiers.Control;
                         break;
                     case "Shift":
-                        modifier = VirtualKey.Shift;
-                        break;
-                    case "App":
-                        modifier = VirtualKey.Application;
+                        modifier = VirtualKeyModifiers.Shift;
                         break;
 
                 }
@@ -82,10 +78,17 @@ namespace Kartian_s_Launcher
         private void AddShortcut_Click(object sender, RoutedEventArgs e)
         {
             string name = gimmeit[0].Name;
-            HotkeyManager.Current.AddOrReplace(name, new KeyboardAccelerator { Key = mainKey, Modifiers = (VirtualKeyModifiers)modifier }, (sender, e) =>
+            try
             {
-                Process.Start(gimmeit[0].Path);
-            });
+                HotkeyManager.Current.AddOrReplace(name, new KeyboardAccelerator { Key = mainKey, Modifiers = modifier }, (sender, e) =>
+                {
+                    Process.Start(gimmeit[0].Path);
+                });
+            }
+            catch (NHotkey.HotkeyAlreadyRegisteredException ex)
+            {
+                sys.ShowErrorMessages(this.Content, ex.ToString());
+            }
         }
     }
 }
