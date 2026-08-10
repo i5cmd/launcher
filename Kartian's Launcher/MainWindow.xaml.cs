@@ -1,3 +1,4 @@
+using Microsoft.UI;
 using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
@@ -7,7 +8,7 @@ using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Media.Imaging;
 using Microsoft.UI.Xaml.Navigation;
-using Microsoft.UI;
+using NHotkey.WinUI;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -22,6 +23,7 @@ using Windows.Foundation.Collections;
 using Windows.Graphics;
 using Windows.Storage;
 using Windows.Storage.Pickers;
+using Windows.System;
 using WinRT.Interop;
 using WinUIEx;
 using static Kartian_s_Launcher.AppAdding;
@@ -34,6 +36,7 @@ namespace Kartian_s_Launcher
         private AppAdding ap;
         private AppDetails curApp;
         private EditDetails edit;
+        private Settings settings;
         private int curIndex;
         public ObservableCollection<AppDetails> ProgramsDetails;
         private JsonManagement json;
@@ -179,11 +182,19 @@ namespace Kartian_s_Launcher
             {
                 Environment.Exit(0);
             };
+
+            HotkeyManager.Current.AddOrReplace("OpenLauncher", new KeyboardAccelerator { Key = VirtualKey.Home, Modifiers = VirtualKeyModifiers.Menu }, (sender, e) =>
+            {
+                this.AppWindow.Show();
+                trayIcon.IsVisible = false;
+            });
         }
+
 
         private void Settings_Click(object sender, RoutedEventArgs e)
         {
-
+            settings = new Settings(ProgramsDetails);
+            sys.ModalWindow(this, settings);
         }
     }
 }
