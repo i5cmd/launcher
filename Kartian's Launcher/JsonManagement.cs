@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Kartian_s_Launcher
 {
@@ -41,6 +42,32 @@ namespace Kartian_s_Launcher
         {
             actualList.Remove(app);
             SaveJson(actualList);
+        }
+
+        public void SaveShortcutJson(IEnumerable<ShortcutDetails> data)
+        {
+            string localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            string myAppFolder = Path.Combine(localAppData, "Kartian's Launcher");
+            Directory.CreateDirectory(myAppFolder);
+            string file = Path.Combine(myAppFolder, "shortcuts.json");
+            string json = JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true });
+            File.WriteAllText(file, json);
+        }
+
+        public IEnumerable<ShortcutDetails> LoadShortcutJson()
+        {
+            string localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            string myAppFolder = Path.Combine(localAppData, "Kartian's Launcher");
+            string file = Path.Combine(myAppFolder, "shortcuts.json");
+            if (File.Exists(file))
+            {
+                string fileContent = File.ReadAllText(file);
+                return JsonSerializer.Deserialize<ObservableCollection<ShortcutDetails>>(fileContent);
+            }
+            else
+            {
+                return new ObservableCollection<ShortcutDetails>();
+            }
         }
     }
 }

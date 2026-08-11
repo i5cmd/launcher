@@ -19,17 +19,17 @@
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
-        <ListView Grid.Row="1" x:Name="Shortcuts" ItemsSource="{x:Bind shortcuters}">
-            <ListView.ItemTemplate>
-                <DataTemplate x:DataType="local:ShortcutDetails">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock FontWeight="Bold" Text="{x:Bind app.Name}"></TextBlock>
-                        <TextBlock FontWeight="Bold" Text="{x:Bind inputsOne}"></TextBlock>
-                    </StackPanel>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
         <StackPanel Grid.Row="0">
+            <ComboBox SelectionChanged="AppComboBox_SelectionChanged" x:Name="AppComboBox" Header="App" PlaceholderText="Pick an app" ItemsSource="{x:Bind gimmeit}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate x:DataType="local:AppDetails">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Spacing="3">
+                            <Image Width="30" Height="30" Source="{x:Bind IconPath}" Margin="2"></Image>
+                            <TextBlock Text="{x:Bind Name}" Margin="2"></TextBlock>
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
             <ListBox x:Name="ModifierSelection" SelectionChanged="ModifierSelection_SelectionChanged">
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -45,7 +45,18 @@
             <TextBox Header="Shortcut" x:Name="ShortcutInput" KeyDown="ShortcutInput_KeyDown" IsReadOnly="True"></TextBox>
             <Button Grid.Row="0" x:Name="AddShortcut" Click="AddShortcut_Click">+ Add</Button>
         </StackPanel>
-       
-        
+        <ListView Grid.Row="1" x:Name="ShortcutsList" ItemsSource="{x:Bind shortcuters}" Width="500" Height="600">
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="local:ShortcutDetails">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Width="30" Height="30" Source="{x:Bind app.IconPath}" Margin="2"></Image>
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock FontWeight="Bold" Text="{x:Bind app.Name}" Margin="2"></TextBlock>
+                            <TextBlock FontStyle="Italic" Text="{x:Bind inputsOne}" Margin="2"></TextBlock>
+                        </StackPanel>
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
     </Grid>
 </Window>

@@ -31,17 +31,21 @@ namespace Kartian_s_Launcher
     }
     public sealed partial class Settings : Window
     {
-        private List<ShortcutDetails> shortcuters;
+        private ObservableCollection<ShortcutDetails> shortcuters;
         private VirtualKeyModifiers modifier;
         private VirtualKey mainKey;
         private ObservableCollection<AppDetails> gimmeit;
         private SystemComponents sys;
+        private JsonManagement json;
+        private AppDetails currentApp;
         public Settings(ObservableCollection<AppDetails> appDetails)
         {
             InitializeComponent();
-            shortcuters = new List<ShortcutDetails>();
             gimmeit = appDetails;
             sys = new SystemComponents();
+            json = new JsonManagement();
+            shortcuters = (ObservableCollection<ShortcutDetails>)json.LoadShortcutJson();
+            ReloadHotkeys();
         }
 
         private void ShortcutInput_KeyDown(object sender, KeyRoutedEventArgs e)
@@ -75,19 +79,55 @@ namespace Kartian_s_Launcher
             }
         }
 
+        private void RefreshList()
+        {
+            ShortcutsList.ItemsSource = null;
+            ShortcutsList.ItemsSource = shortcuters;
+        }
+
         private void AddShortcut_Click(object sender, RoutedEventArgs e)
         {
-            string name = gimmeit[0].Name;
+            string name = currentApp.Name;
             try
             {
                 HotkeyManager.Current.AddOrReplace(name, new KeyboardAccelerator { Key = mainKey, Modifiers = modifier }, (sender, e) =>
                 {
-                    Process.Start(gimmeit[0].Path);
+                    sys.RunProcess(currentApp.Path, "");
                 });
+                string inputString = $"{modifier.ToString()} + {mainKey.ToString()}";
+                shortcuters.Add(new ShortcutDetails { app = currentApp, inputs = new KeyboardAccelerator { Key = mainKey, Modifiers = modifier }, inputsOne = inputString });
+                json.SaveShortcutJson(shortcuters);
             }
             catch (NHotkey.HotkeyAlreadyRegisteredException ex)
             {
+                sys.ShowErrorMessages(this.Content, "This hotkey is already registered. Try a different combination.");
+            }
+            catch (Exception ex)
+            {
                 sys.ShowErrorMessages(this.Content, ex.ToString());
+            }
+        }
+        private void AddAppsToComboBox()
+        {
+
+        }
+
+        private void AppComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (AppComboBox.SelectedItem is AppDetails app)
+            {
+                currentApp = app;
+            }
+        }
+
+        private void ReloadHotkeys()
+        {
+            foreach (var el in shortcuters)
+            {
+                HotkeyManager.Current.AddOrReplace(el.app.Name, el.inputs, (sender, e) =>
+                {
+                    sys.RunProcess(el.app.Path, "");
+                });
             }
         }
     }
