@@ -41,6 +41,7 @@ namespace Kartian_s_Launcher
         private JsonManagement json;
         private AppDetails currentApp;
         private Window mainWindow;
+        private HotkeyManager hmm;
         public Settings(Window window, ObservableCollection<AppDetails> details, ObservableCollection<ShortcutDetails> shortcuts)
         {
             InitializeComponent();
@@ -51,7 +52,7 @@ namespace Kartian_s_Launcher
             shortcuters = shortcuts;
             this.AppWindow.MoveAndResize(new Windows.Graphics.RectInt32
             {
-                Height = 200,
+                Height = 220,
                 Width = 530
             });
             var appWindowPresenter = this.AppWindow.Presenter as OverlappedPresenter;
@@ -100,10 +101,6 @@ namespace Kartian_s_Launcher
             string name = currentApp.Name;
             try
             {
-                HotkeyManager.Current.AddOrReplace(name, new KeyboardAccelerator { Key = mainKey, Modifiers = modifier }, (sender, e) =>
-                {
-                    sys.RunProcess(currentApp.Path, "");
-                });
                 string inputString = $"{modifier.ToString()} + {mainKey.ToString()}";
                 shortcuters.Add(new ShortcutDetails { app = currentApp, inputs = new KeyboardAccelerator { Key = mainKey, Modifiers = modifier }, inputsOne = inputString });
                 json.SaveShortcutJson(shortcuters);

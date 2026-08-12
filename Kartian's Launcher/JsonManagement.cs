@@ -38,10 +38,18 @@ namespace Kartian_s_Launcher
             }
         }
 
-        public void RemoveItem(AppDetails app, ObservableCollection<AppDetails> actualList)
+        public void RemoveItem(AppDetails app, ObservableCollection<AppDetails> actualList, ObservableCollection<ShortcutDetails> sh)
         {
             actualList.Remove(app);
             SaveJson(actualList);
+            foreach (var el in sh.ToList())
+            {
+                if (el.app == app)
+                {
+                    sh.Remove(el);
+                }
+            }
+            SaveShortcutJson(sh);
         }
 
         public void SaveShortcutJson(IEnumerable<ShortcutDetails> data)

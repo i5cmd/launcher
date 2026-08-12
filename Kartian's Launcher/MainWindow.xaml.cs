@@ -45,6 +45,7 @@ namespace Kartian_s_Launcher
         private SystemComponents sys;
         private bool closing = false;
         private TrayIcon trayIcon;
+        private HotkeyManager hm;
 
         public MainWindow()
         {
@@ -71,6 +72,7 @@ namespace Kartian_s_Launcher
         private void Settings_SendCurrentHotkeyList(object? sender, ObservableCollection<ShortcutDetails> e)
         {
             shortcuters = e;
+            hc.ReloadHotkeys(sys, shortcuters);
         }
 
         private void AppWindow_Closing(AppWindow sender, AppWindowClosingEventArgs args)
@@ -154,7 +156,7 @@ namespace Kartian_s_Launcher
                     await sys.ShowErrorMessages(this.Content, pee.errormessage);
                     if (pee.code == -2)
                     {
-                        json.RemoveItem(curApp, ProgramsDetails);
+                        json.RemoveItem(curApp, ProgramsDetails, shortcuters);
                         curApp = null;
                     }
                 }
@@ -165,8 +167,10 @@ namespace Kartian_s_Launcher
         {
             if (curApp != null)
             {
-                json.RemoveItem(curApp, ProgramsDetails);
+                json.RemoveItem(curApp, ProgramsDetails, shortcuters);
+                shortcuters = (ObservableCollection<ShortcutDetails>)json.LoadShortcutJson();
                 curApp = null;
+                hc.ReloadHotkeys(sys, shortcuters);
             }
         }
 
