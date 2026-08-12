@@ -37,8 +37,10 @@ namespace Kartian_s_Launcher
         private AppDetails curApp;
         private EditDetails edit;
         private Settings settings;
+        private HotkeyConfig hc;
         private int curIndex;
         public ObservableCollection<AppDetails> ProgramsDetails;
+        public ObservableCollection<ShortcutDetails> shortcuters;
         private JsonManagement json;
         private SystemComponents sys;
         private bool closing = false;
@@ -50,6 +52,7 @@ namespace Kartian_s_Launcher
             ap = new AppAdding();
             json = new JsonManagement();
             sys = new SystemComponents();
+            hc = new HotkeyConfig();
             ProgramsDetails = new ObservableCollection<AppDetails>(json.LoadJson());
             this.AppWindow.MoveAndResize(new RectInt32
             {
@@ -61,6 +64,13 @@ namespace Kartian_s_Launcher
             appWindowPresenter.PreferredMinimumHeight = 600;
             this.AppWindow.Closing += AppWindow_Closing;
             CreateSystemTray();
+            shortcuters = (ObservableCollection<ShortcutDetails>)json.LoadShortcutJson();
+            hc.ReloadHotkeys(sys, shortcuters);
+        }
+
+        private void Settings_SendCurrentHotkeyList(object? sender, ObservableCollection<ShortcutDetails> e)
+        {
+            shortcuters = e;
         }
 
         private void AppWindow_Closing(AppWindow sender, AppWindowClosingEventArgs args)
@@ -193,7 +203,8 @@ namespace Kartian_s_Launcher
 
         private void Settings_Click(object sender, RoutedEventArgs e)
         {
-            settings = new Settings(ProgramsDetails);
+            settings = new Settings(this, ProgramsDetails, shortcuters);
+            settings.SendCurrentHotkeyList += Settings_SendCurrentHotkeyList;
             sys.ModalWindow(this, settings);
         }
     }

@@ -1,3 +1,4 @@
+using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
@@ -9,6 +10,7 @@ using NHotkey.WinUI;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -16,7 +18,6 @@ using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Security.Cryptography.Core;
 using Windows.System;
-using System.Diagnostics;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -31,21 +32,30 @@ namespace Kartian_s_Launcher
     }
     public sealed partial class Settings : Window
     {
-        private ObservableCollection<ShortcutDetails> shortcuters;
         private VirtualKeyModifiers modifier;
         private VirtualKey mainKey;
         private ObservableCollection<AppDetails> gimmeit;
+        private ObservableCollection<ShortcutDetails> shortcuters;
+        public event EventHandler<ObservableCollection<ShortcutDetails>> SendCurrentHotkeyList;
         private SystemComponents sys;
         private JsonManagement json;
         private AppDetails currentApp;
-        public Settings(ObservableCollection<AppDetails> appDetails)
+        private Window mainWindow;
+        public Settings(Window window, ObservableCollection<AppDetails> details, ObservableCollection<ShortcutDetails> shortcuts)
         {
             InitializeComponent();
-            gimmeit = appDetails;
+            gimmeit = details;
             sys = new SystemComponents();
             json = new JsonManagement();
-            shortcuters = (ObservableCollection<ShortcutDetails>)json.LoadShortcutJson();
-            ReloadHotkeys();
+            mainWindow = window;
+            shortcuters = shortcuts;
+            this.AppWindow.MoveAndResize(new Windows.Graphics.RectInt32
+            {
+                Height = 200,
+                Width = 530
+            });
+            var appWindowPresenter = this.AppWindow.Presenter as OverlappedPresenter;
+            appWindowPresenter.IsResizable = false;
         }
 
         private void ShortcutInput_KeyDown(object sender, KeyRoutedEventArgs e)
@@ -97,6 +107,7 @@ namespace Kartian_s_Launcher
                 string inputString = $"{modifier.ToString()} + {mainKey.ToString()}";
                 shortcuters.Add(new ShortcutDetails { app = currentApp, inputs = new KeyboardAccelerator { Key = mainKey, Modifiers = modifier }, inputsOne = inputString });
                 json.SaveShortcutJson(shortcuters);
+                SendCurrentHotkeyList?.Invoke(this, shortcuters);
             }
             catch (NHotkey.HotkeyAlreadyRegisteredException ex)
             {
@@ -107,27 +118,12 @@ namespace Kartian_s_Launcher
                 sys.ShowErrorMessages(this.Content, ex.ToString());
             }
         }
-        private void AddAppsToComboBox()
-        {
-
-        }
 
         private void AppComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (AppComboBox.SelectedItem is AppDetails app)
             {
                 currentApp = app;
-            }
-        }
-
-        private void ReloadHotkeys()
-        {
-            foreach (var el in shortcuters)
-            {
-                HotkeyManager.Current.AddOrReplace(el.app.Name, el.inputs, (sender, e) =>
-                {
-                    sys.RunProcess(el.app.Path, "");
-                });
             }
         }
     }
