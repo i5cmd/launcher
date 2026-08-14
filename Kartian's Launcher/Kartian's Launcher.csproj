@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
@@ -12,6 +12,8 @@
     <WinUISDKReferences>false</WinUISDKReferences>
     <EnableMsixTooling>true</EnableMsixTooling>
     <Nullable>enable</Nullable>
+	<ApplicationIcon>Assets\appicon.ico</ApplicationIcon>
+	  <WindowsPackageType>None</WindowsPackageType>
   </PropertyGroup>
   <ItemGroup>
     <Content Remove="Assets\generic.webp" />
@@ -22,6 +24,9 @@
   </ItemGroup>
 
   <ItemGroup>
+	  <Content Include="Assets\appicon.ico">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
     <Content Include="Assets\SplashScreen.scale-200.png" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\Square150x150Logo.scale-200.png" />
@@ -47,7 +52,13 @@
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.28000.2526" />
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="2.3.1" />
     <PackageReference Include="NHotkey.WinUI" Version="3.0.1" />
+    <PackageReference Include="System.Drawing.Common" Version="10.0.11" />
     <PackageReference Include="WinUIEx" Version="2.9.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Update="Assets\appicon.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Settings.xaml">

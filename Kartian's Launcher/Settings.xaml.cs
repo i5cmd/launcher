@@ -42,6 +42,7 @@ namespace Kartian_s_Launcher
         private AppDetails currentApp;
         private Window mainWindow;
         private HotkeyManager hmm;
+        private ShortcutDetails cur;
         public Settings(Window window, ObservableCollection<AppDetails> details, ObservableCollection<ShortcutDetails> shortcuts)
         {
             InitializeComponent();
@@ -52,7 +53,7 @@ namespace Kartian_s_Launcher
             shortcuters = shortcuts;
             this.AppWindow.MoveAndResize(new Windows.Graphics.RectInt32
             {
-                Height = 220,
+                Height = 420,
                 Width = 530
             });
             var appWindowPresenter = this.AppWindow.Presenter as OverlappedPresenter;
@@ -76,9 +77,6 @@ namespace Kartian_s_Launcher
                     case "Menu":
                         modifier = VirtualKeyModifiers.Menu;
                         break;
-                    case "LWindows":
-                        modifier = VirtualKeyModifiers.Windows;
-                        break;
                     case "Control":
                         modifier = VirtualKeyModifiers.Control;
                         break;
@@ -98,21 +96,32 @@ namespace Kartian_s_Launcher
 
         private void AddShortcut_Click(object sender, RoutedEventArgs e)
         {
-            string name = currentApp.Name;
-            try
+            if (currentApp != null)
             {
-                string inputString = $"{modifier.ToString()} + {mainKey.ToString()}";
-                shortcuters.Add(new ShortcutDetails { app = currentApp, inputs = new KeyboardAccelerator { Key = mainKey, Modifiers = modifier }, inputsOne = inputString });
-                json.SaveShortcutJson(shortcuters);
-                SendCurrentHotkeyList?.Invoke(this, shortcuters);
-            }
-            catch (NHotkey.HotkeyAlreadyRegisteredException ex)
-            {
-                sys.ShowErrorMessages(this.Content, "This hotkey is already registered. Try a different combination.");
-            }
-            catch (Exception ex)
-            {
-                sys.ShowErrorMessages(this.Content, ex.ToString());
+                string name = currentApp.Name;
+                try
+                {
+                    string inputString = $"{modifier.ToString()} + {mainKey.ToString()}";
+                    foreach (var el in shortcuters)
+                    {
+                        if (el.inputs.Key == mainKey && el.inputs.Modifiers == modifier)
+                        {
+                            sys.ShowErrorMessages(this.Content, "This hotkey is already registered. Try a different combination.");
+                            return;
+                        }
+                    }
+                    shortcuters.Add(new ShortcutDetails { app = currentApp, inputs = new KeyboardAccelerator { Key = mainKey, Modifiers = modifier }, inputsOne = inputString });
+                    json.SaveShortcutJson(shortcuters);
+                    SendCurrentHotkeyList?.Invoke(this, shortcuters);
+                }
+                catch (NHotkey.HotkeyAlreadyRegisteredException ex)
+                {
+                    sys.ShowErrorMessages(this.Content, "This hotkey is already registered. Try a different combination.");
+                }
+                catch (Exception ex)
+                {
+                    sys.ShowErrorMessages(this.Content, ex.ToString());
+                }
             }
         }
 
@@ -121,6 +130,40 @@ namespace Kartian_s_Launcher
             if (AppComboBox.SelectedItem is AppDetails app)
             {
                 currentApp = app;
+            }
+        }
+
+
+        private void RemoveShortcut_Click(object sender, RoutedEventArgs e)
+        {
+            if (cur != null)
+            {
+                int indext = shortcuters.IndexOf(cur);
+                shortcuters.Remove(cur);
+                json.SaveShortcutJson(shortcuters);
+                SendCurrentHotkeyList?.Invoke(this, shortcuters);
+                cur = null;
+                try
+                {
+                    ShortcutsList.SelectedItem = shortcuters[indext];
+                }
+                catch
+                {
+                    ShortcutsList.SelectedItem = null;
+                }
+            }
+        }
+
+        private void ShortcutsList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (ShortcutsList.SelectedItem is ShortcutDetails shortcut)
+            {
+                cur = shortcut;
+                RemoveShortcut.IsEnabled = true;
+            }
+            else
+            {
+                RemoveShortcut.IsEnabled = false;
             }
         }
     }

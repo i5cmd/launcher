@@ -52,7 +52,7 @@ namespace Kartian_s_Launcher
             string[] icoFiles = Directory.GetFiles(folderPath, "*.ico");
             if (icoFiles.Length == 0)
             {
-                return @"C:\Users\Karty\source\repos\Kartian's Launcher\Kartian's Launcher\Assets\generic.webp";
+                return Path.Combine(System.AppContext.BaseDirectory, "Assets", "generic.webp");
             }
             return icoFiles[0];
         }

@@ -10,6 +10,7 @@ using Microsoft.UI.Xaml.Media.Imaging;
 using Microsoft.UI.Xaml.Navigation;
 using NHotkey.WinUI;
 using System;
+using System.Drawing;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -182,7 +183,9 @@ namespace Kartian_s_Launcher
         private void CreateSystemTray()
         {
             var windowId = this.AppWindow.Id;
-            IconId iconId = new IconId(windowId.Value);
+            string path = Path.Combine(AppContext.BaseDirectory, "Assets", "appicon.ico");
+            var icon = new System.Drawing.Icon(path);
+            IconId iconId = Win32Interop.GetIconIdFromIcon(icon.Handle);
             trayIcon = new TrayIcon(0, iconId, "Kartian's Launcher");
             trayIcon.IsVisible = false;
 

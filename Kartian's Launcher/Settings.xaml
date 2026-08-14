@@ -18,7 +18,7 @@
             <ColumnDefinition Width="Auto"></ColumnDefinition>
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <StackPanel Grid.Column="0" Orientation="Vertical">
+        <StackPanel Grid.Column="0" Orientation="Vertical" VerticalAlignment="Center">
             <ComboBox SelectionChanged="AppComboBox_SelectionChanged" x:Name="AppComboBox" Header="App" PlaceholderText="Pick an app" ItemsSource="{x:Bind gimmeit}" Grid.Row="0" HorizontalAlignment="Center" Margin="5">
                 <ComboBox.ItemTemplate>
                     <DataTemplate x:DataType="local:AppDetails">
@@ -38,17 +38,17 @@
                     </ListBox.ItemsPanel>
 
                     <ListBoxItem Content="Alt" x:Name="Menu"></ListBoxItem>
-                    <ListBoxItem Content="Windows" x:Name="LWindows"></ListBoxItem>
                     <ListBoxItem Content="Ctrl" x:Name="Control"></ListBoxItem>
                     <ListBoxItem Content="Shift" x:Name="Shift"></ListBoxItem>
                 </ListBox>
                 <TextBox PlaceholderText="Key" x:Name="ShortcutInput" KeyDown="ShortcutInput_KeyDown" IsReadOnly="True" Width="20" Height="30" Margin="4 0"></TextBox>
             </StackPanel>
-            <StackPanel HorizontalAlignment="Center" Margin="5">
+            <StackPanel HorizontalAlignment="Center" Margin="5" Orientation="Horizontal" Spacing="5">
                 <Button x:Name="AddShortcut" Click="AddShortcut_Click">Add hotkey</Button>
+                <Button x:Name="RemoveShortcut" IsEnabled="False" Click="RemoveShortcut_Click">Remove hotkey</Button>
             </StackPanel>
         </StackPanel>
-        <ListView Grid.Column="1" x:Name="ShortcutsList" ItemsSource="{x:Bind shortcuters}" Width="200">
+        <ListView Grid.Column="1" x:Name="ShortcutsList" SelectionChanged="ShortcutsList_SelectionChanged"  ItemsSource="{x:Bind shortcuters}" Width="200">
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="local:ShortcutDetails">
                     <StackPanel Orientation="Horizontal">
