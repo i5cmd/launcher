@@ -29,7 +29,7 @@ namespace Kartian_s_Launcher
                 };
                 HotkeyManager.Current.AddOrReplace(el.app.Name, accelerator, (sender, e) =>
                 {
-                    sys.RunProcess(el.app.Path, "");
+                    sys.RunProcess(el.app.Path, el.app.Arguments, el.app.AdminRights);
                 });
                 oldList.Add(el.app.Name);
             }
