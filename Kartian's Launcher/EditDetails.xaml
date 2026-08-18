@@ -18,16 +18,21 @@
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0">
-            <TextBox Header="Title" Margin="5, 0" x:Name="TitleBox"></TextBox>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock VerticalAlignment="Center" Margin="5, 0">Icon</TextBlock>
-                <Button Content="Choose..." Margin="0, 5" x:Name="ChooseIcon" Click="ChooseIcon_Click"></Button>
-                <TextBlock x:Name="PathText"></TextBlock>
+        <ScrollViewer Grid.Row="0">
+            <StackPanel>
+                <TextBox Header="Title" Margin="5, 0" x:Name="TitleBox"></TextBox>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock VerticalAlignment="Center" Margin="5, 0">Icon</TextBlock>
+                    <Button Content="Choose..." Margin="0, 5" x:Name="ChooseIcon" Click="ChooseIcon_Click"></Button>
+                    <TextBlock x:Name="PathText" VerticalAlignment="Center" Margin="2 0 0 0"></TextBlock>
+                </StackPanel>
+                <TextBox Header="Author" Margin="5, 0" x:Name="AuthorBox"></TextBox>
+                <TextBox Header="Description" Margin="5, 0" x:Name="DescBox"></TextBox>
+                <Rectangle Height="1" Fill="#333333" HorizontalAlignment="Stretch" Margin="3 10" />
+                <TextBox Header="Launch arguments" Margin="5, 0" x:Name="ArgsBox"></TextBox>
+                <CheckBox Content="Run with administrative permissions" x:Name="AdminBox" Margin="6 5"></CheckBox>
             </StackPanel>
-            <TextBox Header="Author" Margin="5, 0" x:Name="AuthorBox"></TextBox>
-            <TextBox Header="Description" Margin="5, 0" x:Name="DescBox"></TextBox>
-        </StackPanel>
+        </ScrollViewer>
         <StackPanel Grid.Row="1" Width="500">
             <Button Content="Save" Style="{StaticResource AccentButtonStyle}" x:Name="SaveEditedContent" HorizontalAlignment="Center" Margin="5" Click="SaveEditedContent_Click"></Button>
         </StackPanel>

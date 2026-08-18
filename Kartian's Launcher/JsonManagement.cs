@@ -6,12 +6,12 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Kartian_s_Launcher
 {
     public class JsonManagement
     {
+        //ill optimize it soon
         public void SaveJson(IEnumerable<AppDetails> data)
         {
             string localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
@@ -75,6 +75,32 @@ namespace Kartian_s_Launcher
             else
             {
                 return new ObservableCollection<ShortcutDetails>();
+            }
+        }
+
+        public void SaveOptions(ProgramConfiguration data)
+        {
+            string localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            string myAppFolder = Path.Combine(localAppData, "Kartian's Launcher");
+            Directory.CreateDirectory(myAppFolder);
+            string file = Path.Combine(myAppFolder, "options.json");
+            string json = JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true });
+            File.WriteAllText(file, json);
+        }
+
+        public ProgramConfiguration LoadOptions()
+        {
+            string localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            string myAppFolder = Path.Combine(localAppData, "Kartian's Launcher");
+            string file = Path.Combine(myAppFolder, "options.json");
+            if (File.Exists(file))
+            {
+                string fileContent = File.ReadAllText(file);
+                return JsonSerializer.Deserialize<ProgramConfiguration>(fileContent);
+            }
+            else
+            {
+                return new ProgramConfiguration();
             }
         }
     }

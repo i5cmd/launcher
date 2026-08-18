@@ -20,7 +20,8 @@
         </Grid.RowDefinitions>
         <MenuBar Grid.Row="0">
             <MenuBarItem Title="File">
-                <MenuFlyoutItem Text="Settings" x:Name="Settings" Click="Settings_Click"></MenuFlyoutItem>
+                <MenuFlyoutItem Text="Options" x:Name="Options" Click="Options_Click"></MenuFlyoutItem>
+                <MenuFlyoutItem Text="Hotkeys" x:Name="HotkeysItem" Click="Settings_Click"></MenuFlyoutItem>
                 <MenuFlyoutItem Text="Exit" x:Name="ExitProgram" Click="ExitProgram_Click"></MenuFlyoutItem>
             </MenuBarItem>
             <MenuBarItem Title="Content">

@@ -13,13 +13,13 @@
     <EnableMsixTooling>true</EnableMsixTooling>
     <Nullable>enable</Nullable>
 	<ApplicationIcon>Assets\appicon.ico</ApplicationIcon>
-	  <WindowsPackageType>None</WindowsPackageType>
   </PropertyGroup>
   <ItemGroup>
     <Content Remove="Assets\generic.webp" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="EditDetails.xaml" />
+    <None Remove="Options.xaml" />
     <None Remove="Settings.xaml" />
   </ItemGroup>
 
@@ -61,6 +61,16 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <None Update="Assets\generic.webp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Options.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
     <Page Update="Settings.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -85,6 +95,6 @@
     <PublishReadyToRun Condition="'$(Configuration)' == 'Debug'">False</PublishReadyToRun>
     <PublishReadyToRun Condition="'$(Configuration)' != 'Debug'">True</PublishReadyToRun>
     <PublishTrimmed Condition="'$(Configuration)' == 'Debug'">False</PublishTrimmed>
-    <PublishTrimmed Condition="'$(Configuration)' != 'Debug'">True</PublishTrimmed>
+    <PublishTrimmed Condition="'$(Configuration)' != 'Debug'">False</PublishTrimmed>
   </PropertyGroup>
 </Project>

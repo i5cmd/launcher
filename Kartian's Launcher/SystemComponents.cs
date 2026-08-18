@@ -57,7 +57,7 @@ namespace Kartian_s_Launcher
             return file.Path;
         }
 
-        public ProcessErrorsExecutive RunProcess(string path, string launchoptions) // launchoptions for the future, dw dudes!
+        public ProcessErrorsExecutive RunProcess(string path, string launchoptions, bool admin) // launchoptions for the future, dw dudes!
         {
             if (String.IsNullOrWhiteSpace(path))
             {
@@ -81,7 +81,7 @@ namespace Kartian_s_Launcher
 
             try
             {
-                Process.Start(path);
+                Process.Start(CreateProcess(path, launchoptions, admin));
                 return new ProcessErrorsExecutive()
                 {
                     runs = true,
@@ -111,6 +111,35 @@ namespace Kartian_s_Launcher
             };
 
             var result = await dialog.ShowAsync();
+        }
+
+        public async Task<bool> ShowDialog(UIElement target, string title, string message)
+        {
+            ContentDialog dialog = new ContentDialog()
+            {
+                Title = title,
+                Content = message,
+                PrimaryButtonText = "Yes",
+                SecondaryButtonText = "No",
+                XamlRoot = target.XamlRoot
+            };
+
+            ContentDialogResult result = await dialog.ShowAsync();
+
+            return result == ContentDialogResult.Primary;
+        }
+
+        private ProcessStartInfo CreateProcess(string path, string launchoptions, bool admin)
+        {
+            ProcessStartInfo process = new ProcessStartInfo();
+            process.FileName = path;
+            process.Arguments = launchoptions;
+            if (admin)
+            {
+                process.UseShellExecute = true;
+                process.Verb = "runas";
+            }
+            return process;
         }
     }
 }

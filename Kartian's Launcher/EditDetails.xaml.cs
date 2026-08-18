@@ -25,16 +25,19 @@ namespace Kartian_s_Launcher
 {
     public class Edits
     {
-        public string Name { get; set; }
-        public string IconPath { get; set; }
-        public string Author { get; set; }
-        public string Description { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string IconPath { get; set; } = string.Empty;
+        public string Author { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+        public string Arguments { get; set; } = string.Empty;
+        public bool AdminRights { get; set; }
     }
     public sealed partial class EditDetails : Window
     {
         public event EventHandler<Edits> DetailsChanged;
-        private string path = "C:\\Users\\Karty\\source\\repos\\Kartian's Launcher\\Kartian's Launcher\\Assets\\generic.webp";
         private SystemComponents sys;
+        private string path = Path.Combine(System.AppContext.BaseDirectory, "Assets", "generic.webp");
+        private AppDetails app;
         public EditDetails(AppDetails curApp)
         {
             InitializeComponent();
@@ -49,11 +52,8 @@ namespace Kartian_s_Launcher
             appWindowPresenter.IsAlwaysOnTop = true;
             appWindowPresenter.IsMaximizable = false;
             appWindowPresenter.IsMinimizable = false;
-            path = curApp.IconPath;
-            TitleBox.Text = curApp.Name;
-            PathText.Text = curApp.IconPath;
-            AuthorBox.Text = curApp.Author;
-            DescBox.Text = curApp.Description;
+            app = curApp;
+            LoadUp();
         }
 
         private void SaveEditedContent_Click(object sender, RoutedEventArgs e)
@@ -63,7 +63,9 @@ namespace Kartian_s_Launcher
                 Name = TitleBox.Text,
                 IconPath = path,
                 Author = AuthorBox.Text,
-                Description = DescBox.Text
+                Description = DescBox.Text,
+                AdminRights = AdminBox.IsChecked ?? false,
+                Arguments = ArgsBox.Text
             });
             this.Close();
         }
@@ -72,6 +74,17 @@ namespace Kartian_s_Launcher
         private async void ChooseIcon_Click(object sender, RoutedEventArgs e)
         {
             path = await sys.OpenFilePicker(this, ".png");
+        }
+
+        private void LoadUp()
+        {
+            path = app.IconPath;
+            TitleBox.Text = app.Name;
+            PathText.Text = app.IconPath;
+            AuthorBox.Text = app.Author;
+            DescBox.Text = app.Description;
+            AdminBox.IsChecked = app.AdminRights;
+            ArgsBox.Text = app.Arguments;
         }
     }
 }

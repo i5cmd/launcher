@@ -12,11 +12,13 @@ namespace Kartian_s_Launcher
     {
         public string Name { get; set; }
         public string Path { get; set; }
-        public string IconPath { get; set; }
+        public string IconPath { get; set; } = "";
         public string Author { get; set; }
         public long Size { get; set; }
         public DateTime Date { get; set; }
         public string Description { get; set; }
+        public string Arguments { get; set; }
+        public bool AdminRights { get; set; }
     }
     public class AppAdding
     {

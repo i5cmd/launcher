@@ -37,16 +37,17 @@ namespace Kartian_s_Launcher
         private AppAdding ap;
         private AppDetails curApp;
         private EditDetails edit;
-        private Settings settings;
+        private Settings settings; //that's hotkeys. i didnt think that through well... oh welp!
+        private Options options;
         private HotkeyConfig hc;
         private int curIndex;
         public ObservableCollection<AppDetails> ProgramsDetails;
         public ObservableCollection<ShortcutDetails> shortcuters;
         private JsonManagement json;
         private SystemComponents sys;
-        private bool closing = false;
         private TrayIcon trayIcon;
         private HotkeyManager hm;
+        private ProgramConfiguration config;
 
         public MainWindow()
         {
@@ -67,6 +68,7 @@ namespace Kartian_s_Launcher
             this.AppWindow.Closing += AppWindow_Closing;
             CreateSystemTray();
             shortcuters = (ObservableCollection<ShortcutDetails>)json.LoadShortcutJson();
+            config = json.LoadOptions();
             hc.ReloadHotkeys(sys, shortcuters);
         }
 
@@ -78,11 +80,15 @@ namespace Kartian_s_Launcher
 
         private void AppWindow_Closing(AppWindow sender, AppWindowClosingEventArgs args)
         {
-            if (!closing)
+            if (config.WindowXButton)
             {
                 args.Cancel = true;
                 this.AppWindow.Hide();
                 trayIcon.IsVisible = true;
+            }
+            else
+            {
+                Environment.Exit(0);
             }
         }
 
@@ -110,7 +116,8 @@ namespace Kartian_s_Launcher
 
         private void FullScreen(AppDetails app)
         {
-            Iconx2.Source = new BitmapImage(new Uri(app.IconPath));
+            try { Iconx2.Source = new BitmapImage(new Uri(app.IconPath)); }
+            catch { Iconx2.Source = null; }
             Titlex2.Text = app.Name;
             Authorx2.Text = app.Author;
             Pathx2.Text = app.Path;
@@ -135,6 +142,8 @@ namespace Kartian_s_Launcher
             curApp.IconPath = e.IconPath;
             curApp.Author = e.Author;
             curApp.Description = e.Description;
+            curApp.AdminRights = e.AdminRights;
+            curApp.Arguments = e.Arguments;
             RefreshList();
         }
 
@@ -142,8 +151,17 @@ namespace Kartian_s_Launcher
         {
             Programs.ItemsSource = null;
             Programs.ItemsSource = ProgramsDetails;
-            Programs.SelectedItem = ProgramsDetails[curIndex];
-            FullScreen(ProgramsDetails[curIndex]);
+            
+            try
+            {
+                Programs.SelectedItem = ProgramsDetails[curIndex];
+                FullScreen(ProgramsDetails[curIndex]);
+            }
+            catch
+            {
+                Programs.SelectedItem = null;
+                FullScreen(new AppDetails());
+            }
             json.SaveJson(ProgramsDetails);
         }
 
@@ -151,7 +169,7 @@ namespace Kartian_s_Launcher
         {
             if (curApp != null)
             {
-                ProcessErrorsExecutive pee = sys.RunProcess(curApp.Path, "");
+                ProcessErrorsExecutive pee = sys.RunProcess(curApp.Path, curApp.Arguments, curApp.AdminRights);
                 if (!pee.runs)
                 {
                     await sys.ShowErrorMessages(this.Content, pee.errormessage);
@@ -164,14 +182,19 @@ namespace Kartian_s_Launcher
             }
         }
 
-        private void RemoveItem_Click(object sender, RoutedEventArgs e)
+        private async void RemoveItem_Click(object sender, RoutedEventArgs e)
         {
             if (curApp != null)
             {
-                json.RemoveItem(curApp, ProgramsDetails, shortcuters);
-                shortcuters = (ObservableCollection<ShortcutDetails>)json.LoadShortcutJson();
-                curApp = null;
-                hc.ReloadHotkeys(sys, shortcuters);
+                bool result = await sys.ShowDialog(this.Content, "Are you sure?", $"Do you want to remove {curApp.Name}?");
+                if (result)
+                {
+                    json.RemoveItem(curApp, ProgramsDetails, shortcuters);
+                    shortcuters = (ObservableCollection<ShortcutDetails>)json.LoadShortcutJson();
+                    curApp = null;
+                    hc.ReloadHotkeys(sys, shortcuters);
+                    RefreshList();
+                }
             }
         }
 
@@ -189,21 +212,37 @@ namespace Kartian_s_Launcher
             trayIcon = new TrayIcon(0, iconId, "Kartian's Launcher");
             trayIcon.IsVisible = false;
 
-            trayIcon.Selected += (sender, e) =>
+            trayIcon.Selected += (sender, e) => // left click
             {
                 this.AppWindow.Show();
                 trayIcon.IsVisible = false;
             };
 
-            trayIcon.RightDoubleClick += (sender, e) =>
+            /* trayIcon.RightDoubleClick += (sender, e) => doesnt really work so
+            {
+                Environment.Exit(0);
+            }; */
+
+            trayIcon.ContextMenu += (sender, e) => // right click
             {
                 Environment.Exit(0);
             };
 
-            HotkeyManager.Current.AddOrReplace("OpenLauncher", new KeyboardAccelerator { Key = VirtualKey.Home, Modifiers = VirtualKeyModifiers.Menu }, (sender, e) =>
+            HotkeyManager.Current.AddOrReplace("OpenLauncher", new KeyboardAccelerator { Key = VirtualKey.Home, Modifiers = VirtualKeyModifiers.Menu | VirtualKeyModifiers.Control }, (sender, e) =>
             {
-                this.AppWindow.Show();
-                trayIcon.IsVisible = false;
+                if (config.AltHome)
+                {
+                    if (!this.AppWindow.IsVisible)
+                    {
+                        this.AppWindow.Show();
+                        trayIcon.IsVisible = false;
+                    }
+                    else
+                    {
+                        this.AppWindow.Hide();
+                        trayIcon.IsVisible = true;
+                    }
+                }
             });
         }
 
@@ -213,6 +252,18 @@ namespace Kartian_s_Launcher
             settings = new Settings(this, ProgramsDetails, shortcuters);
             settings.SendCurrentHotkeyList += Settings_SendCurrentHotkeyList;
             sys.ModalWindow(this, settings);
+        }
+
+        private void Options_Click(object sender, RoutedEventArgs e)
+        {
+            options = new Options(config);
+            options.SendConfig += Options_SendConfig;
+            sys.ModalWindow(this, options);
+        }
+
+        private void Options_SendConfig(object? sender, ProgramConfiguration e)
+        {
+            config = e;
         }
     }
 }

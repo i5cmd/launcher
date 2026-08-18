@@ -96,6 +96,7 @@ namespace Kartian_s_Launcher
 
         private void AddShortcut_Click(object sender, RoutedEventArgs e)
         {
+            ShortcutDetails dts;
             if (currentApp != null)
             {
                 string name = currentApp.Name;
@@ -110,17 +111,24 @@ namespace Kartian_s_Launcher
                             return;
                         }
                     }
-                    shortcuters.Add(new ShortcutDetails { app = currentApp, inputs = new KeyboardAccelerator { Key = mainKey, Modifiers = modifier }, inputsOne = inputString });
+
+                    HotkeyManager.Current.AddOrReplace($"{currentApp.Name}M", new KeyboardAccelerator { Key = mainKey, Modifiers = modifier }, (s, e) => {}); // test
+                    HotkeyManager.Current.Remove($"{currentApp.Name}M"); // it works at least lol
+
+                    dts = new ShortcutDetails { app = currentApp, inputs = new KeyboardAccelerator { Key = mainKey, Modifiers = modifier }, inputsOne = inputString };
+                    shortcuters.Add(dts);
                     json.SaveShortcutJson(shortcuters);
                     SendCurrentHotkeyList?.Invoke(this, shortcuters);
                 }
                 catch (NHotkey.HotkeyAlreadyRegisteredException ex)
                 {
                     sys.ShowErrorMessages(this.Content, "This hotkey is already registered. Try a different combination.");
+                    return;
                 }
                 catch (Exception ex)
                 {
                     sys.ShowErrorMessages(this.Content, ex.ToString());
+                    return;
                 }
             }
         }
@@ -143,14 +151,8 @@ namespace Kartian_s_Launcher
                 json.SaveShortcutJson(shortcuters);
                 SendCurrentHotkeyList?.Invoke(this, shortcuters);
                 cur = null;
-                try
-                {
-                    ShortcutsList.SelectedItem = shortcuters[indext];
-                }
-                catch
-                {
-                    ShortcutsList.SelectedItem = null;
-                }
+                try { ShortcutsList.SelectedItem = shortcuters[indext]; }
+                catch { ShortcutsList.SelectedItem = null; }
             }
         }
 
