@@ -109,6 +109,7 @@ namespace Kartian_s_Launcher
             if (Programs.SelectedItem is AppDetails app)
             {
                 FullScreen(app);
+                Details.Visibility = Visibility.Visible;
                 curApp = app;
                 curIndex = Programs.SelectedIndex;
             }
@@ -156,6 +157,7 @@ namespace Kartian_s_Launcher
             {
                 Programs.SelectedItem = ProgramsDetails[curIndex];
                 FullScreen(ProgramsDetails[curIndex]);
+                Details.Visibility = Visibility.Visible;
             }
             catch
             {
@@ -172,7 +174,7 @@ namespace Kartian_s_Launcher
                 ProcessErrorsExecutive pee = sys.RunProcess(curApp.Path, curApp.Arguments, curApp.AdminRights);
                 if (!pee.runs)
                 {
-                    await sys.ShowErrorMessages(this.Content, pee.errormessage);
+                    await sys.ShowErrorMessages(this.Content, pee.errormessage, "");
                     if (pee.code == -2)
                     {
                         json.RemoveItem(curApp, ProgramsDetails, shortcuters);
@@ -194,6 +196,7 @@ namespace Kartian_s_Launcher
                     curApp = null;
                     hc.ReloadHotkeys(sys, shortcuters);
                     RefreshList();
+                    Details.Visibility = Visibility.Collapsed;
                 }
             }
         }

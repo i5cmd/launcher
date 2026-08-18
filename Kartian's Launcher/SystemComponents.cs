@@ -12,6 +12,7 @@ using WinRT.Interop;
 using System.ComponentModel;
 using Windows.UI.Notifications;
 using Microsoft.UI.Xaml.Controls;
+using Windows.Media.Core;
 
 namespace Kartian_s_Launcher
 {
@@ -99,11 +100,15 @@ namespace Kartian_s_Launcher
             }
         }
 
-        public async Task ShowErrorMessages(UIElement target, string message)
+        public async Task ShowErrorMessages(UIElement target, string message, string title)
         {
+            if (String.IsNullOrEmpty(title))
+            {
+                title = "Error! x_X";
+            }
             ContentDialog dialog = new ContentDialog()
             {
-                Title = "Error! x_X",
+                Title = title,
                 Content = $"An error occured: {message}",
                 CloseButtonText = "OK",
                 XamlRoot = target.XamlRoot

@@ -107,7 +107,7 @@ namespace Kartian_s_Launcher
                     {
                         if (el.inputs.Key == mainKey && el.inputs.Modifiers == modifier)
                         {
-                            sys.ShowErrorMessages(this.Content, "This hotkey is already registered. Try a different combination.");
+                            sys.ShowErrorMessages(this.Content, "This hotkey is already registered. Try a different combination.", "");
                             return;
                         }
                     }
@@ -122,12 +122,12 @@ namespace Kartian_s_Launcher
                 }
                 catch (NHotkey.HotkeyAlreadyRegisteredException ex)
                 {
-                    sys.ShowErrorMessages(this.Content, "This hotkey is already registered. Try a different combination.");
+                    sys.ShowErrorMessages(this.Content, "This hotkey is already registered. Try a different combination.", "");
                     return;
                 }
                 catch (Exception ex)
                 {
-                    sys.ShowErrorMessages(this.Content, ex.ToString());
+                    sys.ShowErrorMessages(this.Content, ex.ToString(), "");
                     return;
                 }
             }

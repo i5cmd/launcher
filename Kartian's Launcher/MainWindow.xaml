@@ -51,7 +51,7 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-            <StackPanel Grid.Column="1" Orientation="Vertical">
+            <StackPanel x:Name="Details" Grid.Column="1" Orientation="Vertical" Visibility="Collapsed">
                 <StackPanel Orientation="Horizontal">
                     <Border CornerRadius="12"  Width="150" Height="150" Margin="5">
                         <Image Stretch="UniformToFill" x:Name="Iconx2"></Image>
