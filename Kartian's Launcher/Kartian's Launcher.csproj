@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
+    <TargetFramework>net10.0-windows10.0.19041.0</TargetFramework>
     <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
     <RootNamespace>Kartian_s_Launcher</RootNamespace>
     <ApplicationManifest>app.manifest</ApplicationManifest>
@@ -13,10 +13,8 @@
     <EnableMsixTooling>true</EnableMsixTooling>
     <Nullable>enable</Nullable>
 	<ApplicationIcon>Assets\appicon.ico</ApplicationIcon>
+	  <WindowsPackageType>None</WindowsPackageType>
   </PropertyGroup>
-  <ItemGroup>
-    <Content Remove="Assets\generic.webp" />
-  </ItemGroup>
   <ItemGroup>
     <None Remove="EditDetails.xaml" />
     <None Remove="Options.xaml" />
@@ -24,6 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
+	  <Content Include="Assets\generic.webp" />
 	  <Content Include="Assets\appicon.ico">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </Content>
@@ -96,5 +95,6 @@
     <PublishReadyToRun Condition="'$(Configuration)' != 'Debug'">True</PublishReadyToRun>
     <PublishTrimmed Condition="'$(Configuration)' == 'Debug'">False</PublishTrimmed>
     <PublishTrimmed Condition="'$(Configuration)' != 'Debug'">False</PublishTrimmed>
+    <FileVersion>1.1</FileVersion>
   </PropertyGroup>
 </Project>

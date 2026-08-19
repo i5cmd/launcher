@@ -139,6 +139,7 @@ namespace Kartian_s_Launcher
 
         private void ChangeData(object sender, Edits e)
         {
+            string oldString = curApp.Name;
             curApp.Name = e.Name;
             curApp.IconPath = e.IconPath;
             curApp.Author = e.Author;
@@ -146,6 +147,8 @@ namespace Kartian_s_Launcher
             curApp.AdminRights = e.AdminRights;
             curApp.Arguments = e.Arguments;
             RefreshList();
+            hc.FindHotkeyAndReplaceName(oldString, e.Name, shortcuters);
+            json.SaveShortcutJson(shortcuters);
         }
 
         private void RefreshList()

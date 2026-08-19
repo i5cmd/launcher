@@ -12,6 +12,17 @@ namespace Kartian_s_Launcher
     public class HotkeyConfig
     {
         private List<string> oldList = new List<string>();
+
+        public void FindHotkeyAndReplaceName(string oldName, string newName, ObservableCollection<ShortcutDetails> shortcuters)
+        {
+            foreach (var el in shortcuters)
+            {
+                if (el.app.Name == oldName)
+                {
+                    el.app.Name = newName;
+                }
+            }
+        }
         public void ReloadHotkeys(SystemComponents sys, ObservableCollection<ShortcutDetails> shortcuters)
         {
 
