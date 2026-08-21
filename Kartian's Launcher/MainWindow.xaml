@@ -65,24 +65,33 @@
                     <Button Margin="3" Style="{StaticResource AccentButtonStyle}" Click="RunItem_Click">Run</Button>
                     <Button Margin="3" Click="EditItem_Click">Edit</Button>
                 </StackPanel>
-                <StackPanel Orientation="Vertical" Margin="6">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Margin="2" FontWeight="Bold" FontSize="12" VerticalAlignment="Bottom">Path: </TextBlock>
-                        <TextBlock Margin="2" FontWeight="Normal" FontSize="12" VerticalAlignment="Bottom" x:Name="Pathx2"></TextBlock>
+                <Grid Margin="2">
+                    <Grid.ColumnDefinitions >
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Vertical" Margin="6" Grid.Column="0">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Margin="2" FontWeight="Bold" FontSize="12" VerticalAlignment="Bottom">Path:</TextBlock>
+                            <TextBlock Margin="2" FontWeight="Normal" FontSize="12" VerticalAlignment="Bottom" x:Name="Pathx2"></TextBlock>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Margin="2" FontWeight="Bold" FontSize="12" VerticalAlignment="Bottom">Description:</TextBlock>
+                            <TextBlock Margin="2" FontWeight="Normal" FontSize="12" VerticalAlignment="Bottom" x:Name="Descx2"></TextBlock>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Margin="2" FontWeight="Bold" FontSize="12" VerticalAlignment="Bottom">Size:</TextBlock>
+                            <TextBlock Margin="2" FontWeight="Normal" FontSize="12" VerticalAlignment="Bottom" x:Name="Sizex2"></TextBlock>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Margin="2" FontWeight="Bold" FontSize="12" VerticalAlignment="Bottom">Date:</TextBlock>
+                            <TextBlock Margin="2" FontWeight="Normal" FontSize="12" VerticalAlignment="Bottom" x:Name="Datex2"></TextBlock>
+                        </StackPanel>
                     </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Margin="2" FontWeight="Bold" FontSize="12" VerticalAlignment="Bottom">Description:</TextBlock>
-                        <TextBlock Margin="2" FontWeight="Normal" FontSize="12" VerticalAlignment="Bottom" x:Name="Descx2"></TextBlock>
+                    <StackPanel>
+                        <TextBlock x:Name="InternetTitle"></TextBlock>
                     </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Margin="2" FontWeight="Bold" FontSize="12" VerticalAlignment="Bottom">Size:</TextBlock>
-                        <TextBlock Margin="2" FontWeight="Normal" FontSize="12" VerticalAlignment="Bottom" x:Name="Sizex2"></TextBlock>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Margin="2" FontWeight="Bold" FontSize="12" VerticalAlignment="Bottom">Date:</TextBlock>
-                        <TextBlock Margin="2" FontWeight="Normal" FontSize="12" VerticalAlignment="Bottom" x:Name="Datex2"></TextBlock>
-                    </StackPanel>
-                </StackPanel>
+                </Grid>
             </StackPanel>
         </Grid>
     </Grid>
